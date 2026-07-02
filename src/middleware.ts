@@ -14,7 +14,8 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Run on everything except API routes, the admin area, Next internals,
-  // and static files (anything with a dot in the last segment).
-  matcher: ['/((?!api|admin|_next|_vercel|.*\\..*).*)'],
+  // Run on everything except API routes, the admin area, the non-localized
+  // PWA offline fallback, Next internals, and static files (anything with a
+  // dot in the last segment).
+  matcher: ['/((?!api|admin|offline|_next|_vercel|.*\\..*).*)'],
 };

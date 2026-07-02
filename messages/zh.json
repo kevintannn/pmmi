@@ -38,27 +38,27 @@
     "exploreProducts": "了解产品"
   },
   "Home": {
-    "metaTitle": "普迈金属 PMMI — 印尼一体化碳钢制造企业",
+    "metaTitle": "佩尔迈金属 PMMI — 印尼一体化碳钢制造企业",
     "metaDescription": "佩尔迈金属（印尼）有限公司是一家一体化钢铁制造企业，生产碳钢板坯与方坯，年产能达 180 万吨。",
     "heroHeadline": "打造印尼领先钢铁制造企业",
     "heroSubheadline": "一体化碳钢生产，对标世界一流标准。",
     "heroCta": "了解更多",
     "introTitle": "为发展中的国家铸钢",
-    "introBody": "从铁水到成品板坯与方坯，普迈金属在印尼莫罗瓦利工业园区内运营全流程一体化炼钢线，交付高品质、规模化与可靠的产品。",
+    "introBody": "从铁水到成品板坯与方坯，佩尔迈金属在印尼莫罗瓦利工业园区内运营全流程一体化炼钢线，交付高品质、规模化与可靠的产品。",
     "statsCapacity": "年产能",
     "statsCapacityValue": "180 万吨",
     "statsRoute": "一体化流程",
     "statsRouteValue": "转炉 · 精炼 · 连铸",
     "statsProducts": "核心产品",
     "statsProductsValue": "板坯与方坯",
-    "ctaTitle": "与普迈金属合作",
+    "ctaTitle": "与佩尔迈金属合作",
     "ctaBody": "欢迎就产品规格、产能与长期供应与我们团队洽谈。",
     "ctaButton": "联系我们"
   },
   "About": {
     "metaTitle": "关于我们 — 佩尔迈金属（印尼）有限公司",
-    "metaDescription": "了解普迈金属的使命、愿景、核心价值观及一体化炼钢能力。",
-    "title": "关于普迈金属",
+    "metaDescription": "了解佩尔迈金属的使命、愿景、核心价值观及一体化炼钢能力。",
+    "title": "关于佩尔迈金属",
     "intro": "佩尔迈金属（印尼）有限公司（PMMI）是一家一体化炼钢企业，致力于为国内外市场生产高品质碳钢板坯与方坯。",
     "missionTitle": "我们的使命",
     "missionBody": "以高效、安全、可持续的运营，制造世界一流的碳钢，助力印尼基础设施建设与产业发展。",
@@ -85,7 +85,7 @@
   },
   "Production": {
     "metaTitle": "生产工艺 — 佩尔迈金属（印尼）有限公司",
-    "metaDescription": "普迈金属一体化炼钢流程：铁水、转炉（BOF）、精炼炉（LF）与连续铸造。",
+    "metaDescription": "佩尔迈金属一体化炼钢流程：铁水、转炉（BOF）、精炼炉（LF）与连续铸造。",
     "title": "生产工艺",
     "intro": "我们的一体化流程通过四个精确控制的阶段，将铁水转化为成品碳钢。",
     "step1Title": "铁水",
@@ -123,8 +123,8 @@
     "facility7Spec": "稳定的厂区公用工程"
   },
   "Products": {
-    "metaTitle": "产品 — 碳钢板坯与方坯 | 普迈金属",
-    "metaDescription": "普迈金属按国际标准生产碳钢板坯与方坯，广泛应用于建筑、制造与基础设施领域。",
+    "metaTitle": "产品 — 碳钢板坯与方坯 | 佩尔迈金属",
+    "metaDescription": "佩尔迈金属按国际标准生产碳钢板坯与方坯，广泛应用于建筑、制造与基础设施领域。",
     "title": "我们的产品",
     "intro": "按国际标准生产的高品质碳钢。",
     "specifications": "规格",
@@ -140,7 +140,7 @@
     "billetApplications": "螺纹钢、盘条、棒材及一般建筑用材。"
   },
   "Scrap": {
-    "metaTitle": "印尼废钢价格 — 普迈金属",
+    "metaTitle": "印尼废钢价格 — 佩尔迈金属",
     "metaDescription": "印尼每日废钢参考价格，由佩尔迈金属（印尼）有限公司更新。",
     "title": "废钢价格",
     "intro": "每日废钢参考价格，最新价格优先显示。",
@@ -156,11 +156,11 @@
   },
   "Career": {
     "metaTitle": "招聘 — 加入佩尔迈金属（印尼）有限公司",
-    "metaDescription": "加入普迈金属，开启职业发展。探索生产、质量、维护等岗位的招聘机会。",
-    "title": "普迈金属招聘",
+    "metaDescription": "加入佩尔迈金属，开启职业发展。探索生产、质量、维护等岗位的招聘机会。",
+    "title": "佩尔迈金属招聘",
     "bannerTitle": "与我们共同成长",
     "bannerBody": "加入现代化钢厂，成就富有影响力的事业。",
-    "whyTitle": "为什么加入普迈金属",
+    "whyTitle": "为什么加入佩尔迈金属",
     "why1Title": "职业发展",
     "why1Body": "清晰的晋升通道与内部轮岗机会。",
     "why2Title": "培训体系",

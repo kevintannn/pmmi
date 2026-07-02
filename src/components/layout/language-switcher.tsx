@@ -10,7 +10,14 @@ import { LOCALE_STORAGE_KEY } from '@/lib/client-preferences';
 
 const LABEL: Record<string, string> = { zh: '中文', en: 'EN' };
 
-export function LanguageSwitcher({ className }: { className?: string }) {
+export function LanguageSwitcher({
+  className,
+  onDark = false,
+}: {
+  className?: string;
+  /** Render for placement over a dark background (e.g. the home hero). */
+  onDark?: boolean;
+}) {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -31,11 +38,15 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'inline-flex items-center gap-1 rounded-full border bg-background/60 p-0.5 text-sm',
+        'inline-flex items-center gap-1 rounded-full border p-0.5 text-sm',
+        onDark ? 'border-white/25 bg-white/10 backdrop-blur-sm' : 'bg-background/60',
         className,
       )}
     >
-      <Globe className="ml-2 h-3.5 w-3.5 text-muted-foreground" aria-hidden />
+      <Globe
+        className={cn('ml-2 h-3.5 w-3.5', onDark ? 'text-white/70' : 'text-muted-foreground')}
+        aria-hidden
+      />
       {routing.locales.map((loc) => (
         <button
           key={loc}
@@ -46,8 +57,12 @@ export function LanguageSwitcher({ className }: { className?: string }) {
           className={cn(
             'rounded-full px-2.5 py-1 font-medium transition-colors',
             loc === locale
-              ? 'bg-primary text-primary-foreground'
-              : 'text-muted-foreground hover:text-foreground',
+              ? onDark
+                ? 'bg-white text-primary'
+                : 'bg-primary text-primary-foreground'
+              : onDark
+                ? 'text-white/80 hover:text-white'
+                : 'text-muted-foreground hover:text-foreground',
           )}
         >
           {LABEL[loc] ?? loc.toUpperCase()}

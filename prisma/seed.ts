@@ -100,13 +100,13 @@ async function seedSiteContent() {
   const content: Array<{ key: string; en: string; zh: string }> = [
     {
       key: 'contact.email',
-      en: 'info@permaimetal.co.id',
-      zh: 'info@permaimetal.co.id',
+      en: 'info@permaimetal.com',
+      zh: 'info@permaimetal.com',
     },
     {
       key: 'contact.phone',
-      en: '+62 000 0000 0000',
-      zh: '+62 000 0000 0000',
+      en: '+62 851 2107 4332',
+      zh: '+62 851 2107 4332',
     },
     {
       key: 'contact.office',

@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { withTimeout } from '@/lib/db';
 import { formatDateISO } from '@/lib/utils';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import {
@@ -13,15 +14,14 @@ import {
 export const dynamic = 'force-dynamic';
 
 async function getApplications() {
-  try {
-    return await prisma.application.findMany({
+  return withTimeout(
+    prisma.application.findMany({
       orderBy: { createdAt: 'desc' },
       include: { career: { select: { position: true } } },
       take: 500,
-    });
-  } catch {
-    return [];
-  }
+    }),
+    [],
+  );
 }
 
 export default async function ApplicationsAdminPage() {

@@ -1,21 +1,25 @@
 import Link from 'next/link';
 import { LineChart, Briefcase, Inbox, Mail } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
+import { withTimeout } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
 async function getCounts() {
-  try {
-    const [scrap, careers, applications, inquiries] = await Promise.all([
+  const result = await withTimeout(
+    Promise.all([
       prisma.scrapPrice.count(),
       prisma.career.count(),
       prisma.application.count(),
       prisma.inquiry.count(),
-    ]);
-    return { scrap, careers, applications, inquiries, ok: true as const };
-  } catch {
+    ]),
+    null,
+  );
+  if (!result) {
     return { scrap: 0, careers: 0, applications: 0, inquiries: 0, ok: false as const };
   }
+  const [scrap, careers, applications, inquiries] = result;
+  return { scrap, careers, applications, inquiries, ok: true as const };
 }
 
 export default async function AdminDashboard() {

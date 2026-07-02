@@ -44,6 +44,7 @@ const ALL = '__all__';
 
 export function ScrapPricesView({ prices }: { prices: ScrapPriceDTO[] }) {
   const t = useTranslations('Scrap');
+  const tc = useTranslations('Common');
   const [category, setCategory] = useState<string>(ALL);
 
   const categories = useMemo(
@@ -90,7 +91,7 @@ export function ScrapPricesView({ prices }: { prices: ScrapPriceDTO[] }) {
               <SelectValue placeholder={t('filterCategory')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL}>{t('filterCategory')}</SelectItem>
+              <SelectItem value={ALL}>{tc('all')}</SelectItem>
               {categories.map((c) => (
                 <SelectItem key={c} value={c}>
                   {c}
@@ -106,7 +107,7 @@ export function ScrapPricesView({ prices }: { prices: ScrapPriceDTO[] }) {
       <div className="rounded-2xl border bg-card p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold">{t('chartTitle')}</h3>
         <div className="h-[320px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" className="!relative">
             <LineChart data={chartData} margin={{ top: 8, right: 16, bottom: 8, left: -8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(215 20% 90%)" vertical={false} />
               <XAxis

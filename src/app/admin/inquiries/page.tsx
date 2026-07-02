@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { withTimeout } from '@/lib/db';
 import { formatDateISO } from '@/lib/utils';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import {
@@ -13,11 +14,10 @@ import {
 export const dynamic = 'force-dynamic';
 
 async function getInquiries() {
-  try {
-    return await prisma.inquiry.findMany({ orderBy: { createdAt: 'desc' }, take: 500 });
-  } catch {
-    return [];
-  }
+  return withTimeout(
+    prisma.inquiry.findMany({ orderBy: { createdAt: 'desc' }, take: 500 }),
+    [],
+  );
 }
 
 export default async function InquiriesAdminPage() {

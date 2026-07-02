@@ -34,18 +34,32 @@ export function Navbar() {
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href);
 
+  // The home page has a full-bleed dark hero behind the transparent navbar.
+  // In that state we render light text + a scrim for legibility; on inner pages
+  // (light headers) and when scrolled we keep dark text on a solid bar.
+  const isHome = pathname === '/';
+  const onDark = isHome && !scrolled;
+
   return (
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-40 transition-all duration-300',
         scrolled
-          ? 'border-b bg-background/80 backdrop-blur-xl shadow-soft'
+          ? 'border-b bg-background/80 shadow-soft backdrop-blur-xl'
           : 'bg-transparent',
       )}
     >
-      <nav className="container flex h-16 items-center justify-between gap-4 md:h-20">
+      {/* Legibility scrim over the dark hero */}
+      {onDark && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/60 via-black/25 to-transparent"
+        />
+      )}
+
+      <nav className="container relative flex h-16 items-center justify-between gap-4 md:h-20">
         <Link href="/" aria-label="PMMI home" className="shrink-0">
-          <Logo />
+          <Logo invert={onDark} />
         </Link>
 
         {/* Desktop navigation */}
@@ -56,9 +70,13 @@ export function Navbar() {
                 href={item.href}
                 className={cn(
                   'rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
-                  isActive(item.href)
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-foreground',
+                  onDark
+                    ? isActive(item.href)
+                      ? 'text-white'
+                      : 'text-white/75 hover:text-white'
+                    : isActive(item.href)
+                      ? 'text-primary'
+                      : 'text-muted-foreground hover:text-foreground',
                 )}
               >
                 {t(item.key)}
@@ -68,8 +86,13 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
-          <LanguageSwitcher className="hidden sm:inline-flex" />
-          <Button asChild size="sm" className="hidden lg:inline-flex">
+          <LanguageSwitcher className="hidden sm:inline-flex" onDark={onDark} />
+          <Button
+            asChild
+            size="sm"
+            variant={onDark ? 'accent' : 'default'}
+            className="hidden lg:inline-flex"
+          >
             <Link href="/contact">{t('contact')}</Link>
           </Button>
 
@@ -79,7 +102,7 @@ export function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden"
+                className={cn('lg:hidden', onDark && 'text-white hover:bg-white/10 hover:text-white')}
                 aria-label={t('menu')}
               >
                 <Menu className="h-5 w-5" />

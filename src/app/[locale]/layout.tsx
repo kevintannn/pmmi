@@ -35,7 +35,12 @@ export default async function LocaleLayout({
   ]);
 
   return (
-    <html lang={locale} className={fontVariables} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className={fontVariables}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body className="min-h-screen font-sans">
         <NextIntlClientProvider messages={messages}>
           <TooltipProvider delayDuration={200}>

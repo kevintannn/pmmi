@@ -1,5 +1,6 @@
 import 'server-only';
 import { prisma } from '@/lib/prisma';
+import { withTimeout } from '@/lib/db';
 
 export type CareerDTO = {
   id: string;
@@ -13,13 +14,12 @@ export type CareerDTO = {
 
 /** Open positions for the public careers page. Never throws. */
 export async function getOpenCareers(): Promise<CareerDTO[]> {
-  try {
-    const rows = await prisma.career.findMany({
+  const rows = await withTimeout(
+    prisma.career.findMany({
       where: { status: 'OPEN' },
       orderBy: { createdAt: 'desc' },
-    });
-    return rows as CareerDTO[];
-  } catch {
-    return [];
-  }
+    }),
+    [],
+  );
+  return rows as CareerDTO[];
 }

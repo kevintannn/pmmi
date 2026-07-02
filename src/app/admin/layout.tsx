@@ -14,7 +14,7 @@ export const metadata = {
 // wrap this layout (or add middleware) to protect it — see README.
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={fontVariables} suppressHydrationWarning>
+    <html lang="en" className={fontVariables} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className="min-h-screen bg-secondary/30 font-sans">
         <div className="flex min-h-screen flex-col">
           <header className="sticky top-0 z-30 border-b bg-background/90 backdrop-blur">
