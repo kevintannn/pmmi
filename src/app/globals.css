@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Neutrals */
+    --background: 0 0% 100%;
+    --foreground: 222 24% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 24% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 24% 14%;
+
+    /* Dark blue (navy) — primary brand */
+    --primary: 217 61% 22%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Steel gray tints */
+    --secondary: 215 22% 95%;
+    --secondary-foreground: 222 24% 18%;
+    --muted: 215 24% 96%;
+    --muted-foreground: 215 14% 42%;
+
+    /* Gold — accent */
+    --accent: 42 52% 54%;
+    --accent-foreground: 222 40% 12%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 20% 90%;
+    --input: 215 20% 90%;
+    --ring: 217 61% 22%;
+
+    --radius: 0.875rem;
+  }
+
+  .dark {
+    --background: 222 30% 8%;
+    --foreground: 210 20% 96%;
+    --card: 222 28% 10%;
+    --card-foreground: 210 20% 96%;
+    --popover: 222 28% 10%;
+    --popover-foreground: 210 20% 96%;
+    --primary: 210 90% 66%;
+    --primary-foreground: 222 40% 10%;
+    --secondary: 217 20% 18%;
+    --secondary-foreground: 210 20% 96%;
+    --muted: 217 20% 16%;
+    --muted-foreground: 215 16% 62%;
+    --accent: 42 55% 58%;
+    --accent-foreground: 222 40% 10%;
+    --destructive: 0 62% 46%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217 20% 20%;
+    --input: 217 20% 20%;
+    --ring: 210 90% 66%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+    text-rendering: optimizeLegibility;
+  }
+  /* Respect users who prefer reduced motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Fluid, premium display type. */
+  .text-display {
+    @apply font-display font-semibold tracking-tight;
+    line-height: 1.05;
+  }
+  .section {
+    @apply py-20 sm:py-28;
+  }
+  .eyebrow {
+    @apply text-sm font-medium uppercase tracking-[0.2em] text-accent;
+  }
+  /* Subtle skeleton shimmer used by loading states. */
+  .skeleton {
+    @apply relative overflow-hidden rounded-md bg-muted;
+  }
+  .skeleton::after {
+    @apply absolute inset-0 -translate-x-full;
+    content: '';
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      hsl(0 0% 100% / 0.35),
+      transparent
+    );
+    animation: shimmer 1.6s infinite;
+  }
+}

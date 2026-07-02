@@ -1,0 +1,115 @@
+// PMMI — Prisma schema
+// Database: Neon PostgreSQL (free tier)
+// Docs: https://www.prisma.io/docs
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // Direct connection is used by `prisma migrate` / `db push`.
+  // Falls back to DATABASE_URL locally if DIRECT_URL is unset.
+  directUrl = env("DIRECT_URL")
+}
+
+// -----------------------------------------------------------------------------
+// Scrap steel daily pricing
+// -----------------------------------------------------------------------------
+model ScrapPrice {
+  id        String   @id @default(cuid())
+  date      DateTime @default(now()) @db.Date
+  category  String // e.g. "HMS 1", "Shredded", "Heavy Scrap", "Industrial Scrap"
+  price     Decimal  @db.Decimal(12, 2)
+  currency  String   @default("USD")
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+  @@index([category])
+  @@map("scrap_prices")
+}
+
+// -----------------------------------------------------------------------------
+// Careers / job openings
+// -----------------------------------------------------------------------------
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+}
+
+enum CareerStatus {
+  OPEN
+  CLOSED
+}
+
+model Career {
+  id             String         @id @default(cuid())
+  position       String
+  department     String
+  location       String
+  employmentType EmploymentType @default(FULL_TIME)
+  description    String
+  status         CareerStatus   @default(OPEN)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  applications Application[]
+
+  @@index([status])
+  @@map("careers")
+}
+
+// -----------------------------------------------------------------------------
+// Job applications
+// -----------------------------------------------------------------------------
+model Application {
+  id          String   @id @default(cuid())
+  careerId    String?
+  career      Career?  @relation(fields: [careerId], references: [id], onDelete: SetNull)
+  name        String
+  email       String
+  phone       String
+  resumeUrl   String?
+  coverLetter String?
+  createdAt   DateTime @default(now())
+
+  @@index([careerId])
+  @@map("applications")
+}
+
+// -----------------------------------------------------------------------------
+// Contact / general inquiries
+// -----------------------------------------------------------------------------
+model Inquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  country   String?
+  message   String
+  createdAt DateTime @default(now())
+
+  @@map("inquiries")
+}
+
+// -----------------------------------------------------------------------------
+// CMS-like editable content (key + locale -> value)
+// Enables editing homepage text, mission, vision, contact info, etc. from /admin
+// without a code deploy. Values are plain text or JSON strings.
+// -----------------------------------------------------------------------------
+model SiteContent {
+  id        String   @id @default(cuid())
+  key       String // e.g. "home.hero.headline", "about.mission"
+  locale    String // "en" | "zh" | (future) "id"
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@unique([key, locale])
+  @@index([locale])
+  @@map("site_content")
+}
