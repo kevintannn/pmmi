@@ -59,6 +59,7 @@ export default async function ProductionPage({
               <StaggerItem key={f.key}>
                 <div className="group h-full overflow-hidden rounded-2xl border bg-card shadow-soft transition-shadow hover:shadow-soft-lg">
                   <Placeholder
+                    src={`/images/${f.placeholder}.jpg`}
                     label={ph(f.placeholder)}
                     ratio="video"
                     rounded={false}

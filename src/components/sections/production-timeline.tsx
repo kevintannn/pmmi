@@ -10,7 +10,7 @@ const STEPS = [
   { key: 'step2', icon: Wind, placeholder: 'converterFurnace' },
   { key: 'step3', icon: Thermometer, placeholder: 'refiningFurnace' },
   { key: 'step4', icon: Layers, placeholder: 'continuousCasting' },
-  { key: 'step5', icon: Boxes, placeholder: 'steelSlab' },
+  { key: 'step5', icon: Boxes, placeholder: 'slabBillet' },
 ] as const;
 
 export function ProductionTimeline() {
@@ -29,6 +29,7 @@ export function ProductionTimeline() {
             className="flex h-full flex-col rounded-2xl border bg-card p-5 shadow-soft"
           >
             <Placeholder
+              src={`/images/${step.placeholder}.jpg`}
               label={ph(step.placeholder)}
               ratio="video"
               className="mb-4"

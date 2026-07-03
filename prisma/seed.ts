@@ -14,16 +14,16 @@ function daysAgo(n: number): Date {
 }
 
 async function seedScrapPrices() {
-  const categories = ['HMS 1', 'Shredded', 'Heavy Scrap', 'Industrial Scrap'] as const;
+  // Categories PMMI actively purchases. Prices are placeholders (USD/MT,
+  // FOB supplier's nearest port) — update them via /admin/scrap.
+  const categories = ['HMS', 'Busheling'] as const;
   const basePrice: Record<(typeof categories)[number], number> = {
-    'HMS 1': 385,
-    Shredded: 402,
-    'Heavy Scrap': 372,
-    'Industrial Scrap': 358,
+    HMS: 375,
+    Busheling: 405,
   };
 
   const rows: Prisma.ScrapPriceCreateManyInput[] = [];
-  // 14 days of history, small daily drift.
+  // 14 days of history for the admin price-trend chart.
   for (let day = 13; day >= 0; day--) {
     for (const category of categories) {
       const drift = Math.round((Math.sin(day / 2) + (13 - day) * 0.4) * 10) / 10;
@@ -32,7 +32,7 @@ async function seedScrapPrices() {
         category,
         price: new Prisma.Decimal((basePrice[category] + drift).toFixed(2)),
         currency: 'USD',
-        notes: category === 'HMS 1' ? 'CFR Indonesia, indicative' : null,
+        notes: null,
       });
     }
   }

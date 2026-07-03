@@ -42,6 +42,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { ScrapPriceChart } from '@/components/sections/scrap-price-chart';
 
 type Row = ScrapPriceInput & { id: string };
 
@@ -139,13 +140,17 @@ export default function ScrapAdminPage() {
     <div className="space-y-6">
       <AdminPageHeader
         title="Scrap Prices"
-        description="Add daily indicative scrap steel prices. Newest first on the public page."
+        description="Set FOB buying prices (USD/MT). The latest price per category is shown on the public page."
         action={
           <Button onClick={openAdd}>
             <Plus /> Add Price
           </Button>
         }
       />
+
+      {!loading && rows.length > 0 && (
+        <ScrapPriceChart prices={rows} title="Price Trend" />
+      )}
 
       <div className="overflow-hidden rounded-2xl border bg-background shadow-soft">
         <Table>

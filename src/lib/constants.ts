@@ -21,13 +21,8 @@ export const NAV_ITEMS = [
   { key: 'contact', href: '/contact' },
 ] as const;
 
-/** Scrap categories used for admin defaults and chart filtering. */
-export const SCRAP_CATEGORIES = [
-  'HMS 1',
-  'Shredded',
-  'Heavy Scrap',
-  'Industrial Scrap',
-] as const;
+/** Scrap categories PMMI actively purchases. */
+export const SCRAP_CATEGORIES = ['HMS', 'Busheling'] as const;
 
 export const CURRENCIES = ['USD', 'IDR', 'CNY'] as const;
 
