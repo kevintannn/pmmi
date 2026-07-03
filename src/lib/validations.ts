@@ -20,7 +20,9 @@ export const applicationSchema = z.object({
   name: z.string().min(2, 'Name is too short').max(120),
   email: z.string().email('Invalid email address'),
   phone: z.string().min(6, 'Invalid phone number').max(40),
-  resumeUrl: z.string().url().optional().or(z.literal('')),
+  // Relative path (e.g. "/uploads/abc.pdf") from our own upload endpoint, or a
+  // full URL — not validated as a strict URL so relative paths are accepted.
+  resumeUrl: z.string().max(1000).optional().or(z.literal('')),
   coverLetter: z.string().max(6000).optional().or(z.literal('')),
 });
 export type ApplicationInput = z.infer<typeof applicationSchema>;

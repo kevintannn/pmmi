@@ -1,13 +1,16 @@
 /**
- * Dependency-free generator for PWA icons, favicon and the Open Graph image.
- * Draws the PMMI monogram (a steel "M" chevron) in white on a navy field.
+ * Generator for PWA icons, favicon and the Open Graph image.
  *
- * Run with: `npm run icons`  (also runs automatically before build)
- * Replace the generated files in /public with real brand assets anytime.
+ * If /public/logo.jpg exists, the icons are built from it (scaled onto a
+ * matching background). Otherwise it falls back to drawing the PMMI monogram.
+ *
+ * Run with: `npm run icons` (also runs automatically before build).
+ * TIP: for crisp icons, make /public/logo.jpg at least 512×512.
  */
 import { deflateSync } from 'node:zlib';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
+import jpeg from 'jpeg-js';
 
 const NAVY = [22, 48, 92];
 const GOLD = [200, 162, 74];
@@ -80,39 +83,58 @@ function blend(c, x, y, color, alpha) {
   c.buf[i + 2] = Math.round(c.buf[i + 2] * (1 - a) + color[2] * a);
 }
 
+// ---- Logo image (optional) -------------------------------------------------
+function loadLogo() {
+  const p = path.join(process.cwd(), 'public', 'logo.jpg');
+  if (!existsSync(p)) return null;
+  try {
+    const raw = jpeg.decode(readFileSync(p), { useTArray: true, formatAsRGBA: true });
+    return { w: raw.width, h: raw.height, buf: Buffer.from(raw.data) };
+  } catch {
+    return null;
+  }
+}
+
+/** Bilinear-sample an image at fractional source coordinates → [r, g, b]. */
+function sampleRGB(img, sx, sy) {
+  const x0 = Math.floor(sx);
+  const y0 = Math.floor(sy);
+  const x1 = Math.min(x0 + 1, img.w - 1);
+  const y1 = Math.min(y0 + 1, img.h - 1);
+  const fx = sx - x0;
+  const fy = sy - y0;
+  const at = (xx, yy) => {
+    const i = (yy * img.w + xx) * 4;
+    return [img.buf[i], img.buf[i + 1], img.buf[i + 2]];
+  };
+  const a = at(x0, y0);
+  const b = at(x1, y0);
+  const c = at(x0, y1);
+  const d = at(x1, y1);
+  const lerp = (m, n, f) => m + (n - m) * f;
+  return [0, 1, 2].map((k) => lerp(lerp(a[k], b[k], fx), lerp(c[k], d[k], fx), fy));
+}
+
+/** Draw (scaled) an image into canvas at [x0,y0] with size tw×th. */
+function drawImage(c, img, x0, y0, tw, th) {
+  for (let y = 0; y < th; y++) {
+    for (let x = 0; x < tw; x++) {
+      const rgb = sampleRGB(img, (x / tw) * img.w, (y / th) * img.h);
+      blend(c, Math.round(x0) + x, Math.round(y0) + y, rgb, 1);
+    }
+  }
+}
+
+// ---- Monogram fallback -----------------------------------------------------
 function distToSegment(px, py, ax, ay, bx, by) {
   const dx = bx - ax;
   const dy = by - ay;
   const len2 = dx * dx + dy * dy || 1;
   let t = ((px - ax) * dx + (py - ay) * dy) / len2;
   t = Math.max(0, Math.min(1, t));
-  const cx = ax + t * dx;
-  const cy = ay + t * dy;
-  return Math.hypot(px - cx, py - cy);
+  return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
 }
 
-function drawPolyline(c, pts, width, color) {
-  const half = width / 2;
-  const pad = Math.ceil(half) + 2;
-  const minX = Math.max(0, Math.floor(Math.min(...pts.map((p) => p[0])) - pad));
-  const maxX = Math.min(c.w, Math.ceil(Math.max(...pts.map((p) => p[0])) + pad));
-  const minY = Math.max(0, Math.floor(Math.min(...pts.map((p) => p[1])) - pad));
-  const maxY = Math.min(c.h, Math.ceil(Math.max(...pts.map((p) => p[1])) + pad));
-  for (let y = minY; y < maxY; y++) {
-    for (let x = minX; x < maxX; x++) {
-      let d = Infinity;
-      for (let i = 0; i < pts.length - 1; i++) {
-        d = Math.min(
-          d,
-          distToSegment(x + 0.5, y + 0.5, pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1]),
-        );
-      }
-      blend(c, x, y, color, half + 0.5 - d);
-    }
-  }
-}
-
-// Monogram in a 24x24 viewBox mapped into the given box.
 function monogram(c, x0, y0, size, color) {
   const V = [
     [4, 18],
@@ -121,8 +143,25 @@ function monogram(c, x0, y0, size, color) {
     [15, 6],
     [20, 18],
   ];
-  const map = (p) => [x0 + (p[0] / 24) * size, y0 + (p[1] / 24) * size];
-  drawPolyline(c, V.map(map), size * 0.09, color);
+  const pts = V.map((p) => [x0 + (p[0] / 24) * size, y0 + (p[1] / 24) * size]);
+  const half = (size * 0.09) / 2;
+  const pad = Math.ceil(half) + 2;
+  const minX = Math.max(0, Math.floor(Math.min(...pts.map((p) => p[0])) - pad));
+  const maxX = Math.min(c.w, Math.ceil(Math.max(...pts.map((p) => p[0])) + pad));
+  const minY = Math.max(0, Math.floor(Math.min(...pts.map((p) => p[1])) - pad));
+  const maxY = Math.min(c.h, Math.ceil(Math.max(...pts.map((p) => p[1])) + pad));
+  for (let y = minY; y < maxY; y++) {
+    for (let x = minX; x < maxX; x++) {
+      let dmin = Infinity;
+      for (let i = 0; i < pts.length - 1; i++) {
+        dmin = Math.min(
+          dmin,
+          distToSegment(x + 0.5, y + 0.5, pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1]),
+        );
+      }
+      blend(c, x, y, color, half + 0.5 - dmin);
+    }
+  }
 }
 
 // ---- Outputs ---------------------------------------------------------------
@@ -130,10 +169,21 @@ const outDir = path.join(process.cwd(), 'public');
 const iconsDir = path.join(outDir, 'icons');
 mkdirSync(iconsDir, { recursive: true });
 
+const logo = loadLogo();
+// Background = logo's top-left pixel (so any padding blends seamlessly).
+const bg = logo ? [logo.buf[0], logo.buf[1], logo.buf[2]] : NAVY;
+
 function icon(size, { maskable = false } = {}) {
-  const c = canvas(size, size, NAVY);
-  const pad = maskable ? size * 0.22 : size * 0.16;
-  monogram(c, pad, pad, size - pad * 2, WHITE);
+  const c = canvas(size, size, bg);
+  if (logo) {
+    // The logo already carries its own margin; add a little more for maskable
+    // so it stays within the safe zone.
+    const pad = maskable ? size * 0.16 : size * 0.06;
+    drawImage(c, logo, pad, pad, size - pad * 2, size - pad * 2);
+  } else {
+    const pad = maskable ? size * 0.22 : size * 0.16;
+    monogram(c, pad, pad, size - pad * 2, WHITE);
+  }
   return encodePNG(size, size, c.buf);
 }
 
@@ -142,7 +192,7 @@ writeFileSync(path.join(iconsDir, 'icon-512.png'), icon(512));
 writeFileSync(path.join(iconsDir, 'maskable-512.png'), icon(512, { maskable: true }));
 writeFileSync(path.join(iconsDir, 'apple-touch-icon.png'), icon(180));
 
-// favicon.ico wrapping a 32x32 PNG
+// favicon.ico wrapping a 32×32 PNG
 const faviconPng = icon(32);
 const dir = Buffer.alloc(6);
 dir.writeUInt16LE(0, 0);
@@ -157,14 +207,25 @@ entry.writeUInt32LE(faviconPng.length, 8);
 entry.writeUInt32LE(22, 12);
 writeFileSync(path.join(outDir, 'favicon.ico'), Buffer.concat([dir, entry, faviconPng]));
 
-// Open Graph image 1200x630
+// Open Graph image 1200×630
 {
   const w = 1200;
   const h = 630;
-  const c = canvas(w, h, NAVY);
-  monogram(c, w / 2 - 130, 150, 260, WHITE);
-  drawPolyline(c, [[w / 2 - 90, 470], [w / 2 + 90, 470]], 10, GOLD);
+  const c = canvas(w, h, logo ? bg : NAVY);
+  if (logo) {
+    const s = 300;
+    drawImage(c, logo, (w - s) / 2, (h - s) / 2 - 20, s, s);
+  } else {
+    monogram(c, w / 2 - 130, 150, 260, WHITE);
+    const barY = 470;
+    for (let x = w / 2 - 90; x < w / 2 + 90; x++)
+      for (let y = barY - 5; y < barY + 5; y++) blend(c, x, y, GOLD, 1);
+  }
   writeFileSync(path.join(outDir, 'og.png'), encodePNG(w, h, c.buf));
 }
 
-console.log('✓ Generated icons, favicon and og.png in /public');
+console.log(
+  logo
+    ? '✓ Generated icons, favicon and og.png from public/logo.jpg'
+    : '✓ Generated icons, favicon and og.png (monogram — no public/logo.jpg found)',
+);
