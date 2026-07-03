@@ -19,9 +19,10 @@ const DEFAULTS: Record<string, { en: string; zh: string }> = {
   },
 };
 
-// If the database is unreachable/slow, fall back to defaults quickly instead of
-// blocking every page render on Prisma's connection-retry window.
-const DB_TIMEOUT_MS = 1500;
+// Safety net against a truly unreachable database. Generous enough to absorb a
+// Neon cold start (free-tier databases auto-suspend and take a few seconds to
+// wake) so we don't fall back to defaults while the DB is merely waking up.
+const DB_TIMEOUT_MS = 8000;
 
 // In-memory TTL cache (per server instance) so the footer/contact info isn't
 // re-queried on every navigation. Successful lookups are held longer than
