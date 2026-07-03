@@ -23,7 +23,14 @@ export function InquiryForm() {
 
   const form = useForm<InquiryInput>({
     resolver: zodResolver(inquirySchema),
-    defaultValues: { name: '', email: '', company: '', country: '', message: '' },
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      company: '',
+      country: '',
+      message: '',
+    },
   });
 
   async function onSubmit(values: InquiryInput) {
@@ -68,6 +75,19 @@ export function InquiryForm() {
                 <FormLabel>{t('email')}</FormLabel>
                 <FormControl>
                   <Input type="email" autoComplete="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('phone')}</FormLabel>
+                <FormControl>
+                  <Input type="tel" autoComplete="tel" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

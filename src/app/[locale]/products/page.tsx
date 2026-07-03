@@ -73,7 +73,7 @@ export default async function ProductsPage({
                 <ProductJsonLd name={p.name} description={p.specs} category="Carbon Steel" />
                 <div className="mt-8 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
                   <Reveal direction="right">
-                    <Placeholder src={`/images/${p.placeholder}.jpg`} label={ph(p.placeholder)} ratio="square" />
+                    <Placeholder src={`/images/${p.placeholder}.webp`} label={ph(p.placeholder)} ratio="square" />
                   </Reveal>
 
                   <Reveal direction="left" className="space-y-8">

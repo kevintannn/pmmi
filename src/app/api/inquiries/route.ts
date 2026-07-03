@@ -22,11 +22,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const { name, email, company, country, message } = parsed.data;
+    const { name, email, phone, company, country, message } = parsed.data;
     const inquiry = await prisma.inquiry.create({
       data: {
         name,
         email,
+        phone: phone || null,
         company: company || null,
         country: country || null,
         message,

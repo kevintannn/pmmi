@@ -232,6 +232,7 @@
     "form": {
       "name": "Name",
       "email": "Email",
+      "phone": "Phone",
       "company": "Company",
       "country": "Country",
       "message": "Message",

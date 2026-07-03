@@ -61,6 +61,9 @@ export default async function InquiriesAdminPage() {
                     >
                       {q.email}
                     </a>
+                    {q.phone && (
+                      <div className="text-sm text-muted-foreground">{q.phone}</div>
+                    )}
                   </TableCell>
                   <TableCell className="text-muted-foreground">{q.company ?? '—'}</TableCell>
                   <TableCell className="text-muted-foreground">{q.country ?? '—'}</TableCell>

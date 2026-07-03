@@ -58,7 +58,7 @@ export default async function HomePage({
             </Button>
           </Reveal>
           <Reveal direction="left">
-            <Placeholder src="/images/drone-view.jpg" label={ph('droneView')} ratio="portrait" />
+            <Placeholder src="/images/drone-view.webp" label={ph('droneView')} ratio="portrait" />
           </Reveal>
         </div>
 

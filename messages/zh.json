@@ -232,6 +232,7 @@
     "form": {
       "name": "姓名",
       "email": "电子邮箱",
+      "phone": "电话",
       "company": "公司",
       "country": "国家/地区",
       "message": "留言",

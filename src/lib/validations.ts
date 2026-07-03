@@ -6,6 +6,7 @@ import { z } from 'zod';
 export const inquirySchema = z.object({
   name: z.string().min(2, 'Name is too short').max(120),
   email: z.string().email('Invalid email address'),
+  phone: z.string().max(40).optional().or(z.literal('')),
   company: z.string().max(160).optional().or(z.literal('')),
   country: z.string().max(80).optional().or(z.literal('')),
   message: z.string().min(10, 'Please provide a few more details').max(4000),

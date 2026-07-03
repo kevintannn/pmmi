@@ -29,7 +29,7 @@ export function ProductionTimeline() {
             className="flex h-full flex-col rounded-2xl border bg-card p-5 shadow-soft"
           >
             <Placeholder
-              src={`/images/${step.placeholder}.jpg`}
+              src={`/images/${step.placeholder}.webp`}
               label={ph(step.placeholder)}
               ratio="video"
               className="mb-4"

@@ -29,7 +29,7 @@ export function Hero() {
       {/* Parallax background image */}
       <motion.div style={{ y }} className="absolute inset-0 -z-10">
         <Placeholder
-          src='/images/factory-exterior.jpg'
+          src='/images/factory-exterior.webp'
           label={ph('factoryExterior')}
           fill
           rounded={false}

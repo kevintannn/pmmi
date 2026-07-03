@@ -17,7 +17,7 @@ interface PlaceholderProps {
   label: string;
   /**
    * Optional real image. Drop a file into /public/images and pass its path
-   * (e.g. "/images/converter-furnace.jpg") to replace the placeholder — no
+   * (e.g. "/images/converter-furnace.webp") to replace the placeholder — no
    * other change required.
    */
   src?: string;

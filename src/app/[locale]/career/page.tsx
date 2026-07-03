@@ -47,7 +47,7 @@ export default async function CareerPage({
         <div className="container">
           <Reveal>
             <div className="relative overflow-hidden rounded-3xl">
-              <Placeholder label={ph('employees')} ratio="wide" rounded={false} />
+              <Placeholder src={`/images/employees.webp`} label={ph('employees')} ratio="wide" rounded={false} />
               <div className="absolute inset-0 flex items-center bg-gradient-to-r from-charcoal/80 to-charcoal/30">
                 <div className="max-w-xl p-8 text-white sm:p-14">
                   <h2 className="text-display text-3xl sm:text-4xl">{t('bannerTitle')}</h2>
