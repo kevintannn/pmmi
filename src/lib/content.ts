@@ -3,19 +3,19 @@ import { prisma } from '@/lib/prisma';
 
 /** Default values used when a SiteContent row is missing (e.g. before seeding). */
 const DEFAULTS: Record<string, { en: string; zh: string }> = {
-  'contact.email': { en: 'info@permaimetal.co.id', zh: 'info@permaimetal.co.id' },
-  'contact.phone': { en: '+62 000 0000 0000', zh: '+62 000 0000 0000' },
+  'contact.email': { en: 'info@permaimetal.com', zh: 'info@permaimetal.com' },
+  'contact.phone': { en: '+62 851 2107 4332', zh: '+62 851 2107 4332' },
   'contact.office': {
-    en: 'Jakarta Representative Office, Indonesia',
-    zh: '印度尼西亚雅加达代表处',
+    en: 'PMMI PIK 2 SOBC006, Tangerang Regency, Banten, Indonesia',
+    zh: 'PMMI PIK 2 SOBC006，印度尼西亚万丹省丹格朗县',
   },
   'contact.factory': {
     en: 'Indonesia Morowali Industrial Park (IMIP), Central Sulawesi, Indonesia',
     zh: '印度尼西亚莫罗瓦利工业园区（IMIP），中苏拉威西省',
   },
   'contact.hours': {
-    en: 'Monday – Saturday, 08:00 – 17:00 WITA',
-    zh: '周一至周六 08:00 – 17:00（印尼中部时间）',
+    en: 'Monday – Friday, 08:30 – 17:00 WIB',
+    zh: '周一至周五 08:30 – 17:00（印尼西部时间）',
   },
 };
 

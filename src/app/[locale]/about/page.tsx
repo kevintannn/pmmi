@@ -51,7 +51,7 @@ export default async function AboutPage({
           <Reveal direction="right">
             <Card className="h-full">
               <CardContent className="p-8">
-                <Placeholder label={ph('office')} ratio="video" className="mb-6" />
+                <Placeholder src='/images/mission-title.jpg' label={ph('office')} ratio="video" className="mb-6" />
                 <h3 className="text-2xl font-semibold">{t('missionTitle')}</h3>
                 <p className="mt-3 leading-relaxed text-muted-foreground">
                   {t('missionBody')}
@@ -62,7 +62,7 @@ export default async function AboutPage({
           <Reveal direction="left">
             <Card className="h-full">
               <CardContent className="p-8">
-                <Placeholder label={ph('droneView')} ratio="video" className="mb-6" />
+                <Placeholder src='/images/vision-title.jpg' label={ph('droneView')} ratio="video" className="mb-6" />
                 <h3 className="text-2xl font-semibold">{t('visionTitle')}</h3>
                 <p className="mt-3 leading-relaxed text-muted-foreground">
                   {t('visionBody')}

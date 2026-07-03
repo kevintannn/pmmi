@@ -132,11 +132,11 @@
     "applications": "Applications",
     "slabName": "Carbon Steel Slab",
     "slabSpecs": "Low- to medium-carbon grades with controlled chemistry and clean surface quality.",
-    "slabDimensions": "Thickness 150–250 mm · Width 900–1,600 mm · Length cut-to-order",
+    "slabDimensions": "Thickness 210&230 mm · Width 1,000-1,650 mm · Length cut-to-order",
     "slabApplications": "Hot-rolled coil, plate, structural sections and shipbuilding.",
     "billetName": "Carbon Steel Billet",
     "billetSpecs": "Consistent internal soundness and dimensional accuracy for downstream rolling.",
-    "billetDimensions": "Section 120–165 mm square · Length cut-to-order",
+    "billetDimensions": "Section 130&150 mm square · Length cut-to-order",
     "billetApplications": "Rebar, wire rod, bar and general construction products."
   },
   "Scrap": {

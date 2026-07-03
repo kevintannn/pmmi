@@ -52,7 +52,7 @@
     "statsProducts": "核心产品",
     "statsProductsValue": "板坯与方坯",
     "ctaTitle": "与佩尔迈金属合作",
-    "ctaBody": "欢迎就产品规格、产能与长期供应与我们团队洽谈。",
+    "ctaBody": "欢迎就产品规格、产能及长期供应与我们团队洽谈。",
     "ctaButton": "联系我们"
   },
   "About": {
@@ -77,7 +77,7 @@
     "highlight1Title": "180 万吨年产能",
     "highlight1Body": "碳钢板坯与方坯的大规模年产量。",
     "highlight2Title": "一体化炼钢",
-    "highlight2Body": "转炉—精炼—连铸完整流程一体化。",
+    "highlight2Body": "转炉 — 精炼 — 连铸完整流程一体化。",
     "highlight3Title": "现代化设施",
     "highlight3Body": "先进的炼钢炉、连铸机与实验室。",
     "highlight4Title": "区位优势",
@@ -132,11 +132,11 @@
     "applications": "应用领域",
     "slabName": "碳钢板坯",
     "slabSpecs": "低碳至中碳钢种，成分可控，表面质量洁净。",
-    "slabDimensions": "厚度 150–250 毫米 · 宽度 900–1,600 毫米 · 长度按需切割",
+    "slabDimensions": "厚度 210&230 毫米 · 宽度 1,000-1,650 毫米 · 长度按需切割",
     "slabApplications": "热轧卷板、中厚板、型钢及造船用钢。",
     "billetName": "碳钢方坯",
     "billetSpecs": "内部致密、尺寸精度稳定，适合下游轧制。",
-    "billetDimensions": "断面 120–165 毫米见方 · 长度按需切割",
+    "billetDimensions": "断面 130&150 毫米见方 · 长度按需切割",
     "billetApplications": "螺纹钢、盘条、棒材及一般建筑用材。"
   },
   "Scrap": {

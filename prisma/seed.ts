@@ -110,8 +110,8 @@ async function seedSiteContent() {
     },
     {
       key: 'contact.office',
-      en: 'Jakarta Representative Office, Indonesia',
-      zh: '印度尼西亚雅加达代表处',
+      en: 'PMMI PIK 2 SOBC006, Tangerang Regency, Banten, Indonesia',
+      zh: 'PMMI PIK 2 SOBC006，印度尼西亚万丹省丹格朗县',
     },
     {
       key: 'contact.factory',
@@ -120,8 +120,8 @@ async function seedSiteContent() {
     },
     {
       key: 'contact.hours',
-      en: 'Monday – Saturday, 08:00 – 17:00 WITA',
-      zh: '周一至周六 08:00 – 17:00（印尼中部时间）',
+      en: 'Monday – Friday, 08:30 – 17:00 WIB',
+      zh: '周一至周五 08:30 – 17:00（印尼西部时间）',
     },
   ];
 

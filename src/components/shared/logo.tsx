@@ -1,8 +1,10 @@
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 /**
- * PMMI wordmark. A geometric "steel" monogram + company short name.
- * Replace the SVG mark with a real logo file when available.
+ * PMMI logo. The mark is loaded from /public/logo.jpg — replace that file to
+ * change the logo. Set `showText={false}` if your image already includes the
+ * company name.
  */
 export function Logo({
   className,
@@ -16,15 +18,18 @@ export function Logo({
   return (
     <span className={cn('inline-flex items-center gap-2.5', className)}>
       <span
-        className={cn(
-          'grid h-9 w-9 place-items-center rounded-xl font-display text-sm font-bold',
-          invert ? 'bg-white text-primary' : 'bg-primary text-white',
-        )}
+        className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-[5px] bg-black"
         aria-hidden
       >
-        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
-          <path d="M4 18 L9 6 L12 13 L15 6 L20 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        {/* Rendered smaller than the tile so the emblem sits in more black
+            background instead of filling the frame edge-to-edge. */}
+        <Image
+          src="/logo.jpg"
+          alt="PMMI logo"
+          width={98}
+          height={98}
+          className="h-7 w-7 object-contain"
+        />
       </span>
       {showText && (
         <span className="flex flex-col leading-none">
