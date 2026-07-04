@@ -74,7 +74,7 @@ export function Footer({
 
         <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t pt-8 text-center text-xs text-muted-foreground sm:flex-row sm:text-left">
           <p>
-            © {year} {COMPANY.legalName}. {t('rights')}
+            © {year} Kevin Tan 陈羽悎 • {t('rights')}
           </p>
           <p>{COMPANY.shortName}</p>
         </div>
