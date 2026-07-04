@@ -3,9 +3,10 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Mail, Phone, Clock, Building2, MapPin } from 'lucide-react';
 import { pageMetadata } from '@/lib/metadata';
 import { getContactInfo } from '@/lib/content';
+import { OFFICE_MAP_EMBED_URL } from '@/lib/constants';
 import { PageHeader } from '@/components/shared/page-header';
 import { Reveal } from '@/components/shared/motion';
-import { Placeholder } from '@/components/shared/placeholder';
+import { OfficeMap } from '@/components/sections/office-map';
 import { InquiryForm } from '@/components/forms/inquiry-form';
 import { LocalBusinessJsonLd } from '@/components/seo/json-ld';
 
@@ -72,10 +73,12 @@ export default async function ContactPage({
               ))}
             </ul>
 
-            {/* Google Maps placeholder */}
-            <div className="relative">
-              <Placeholder label={t('mapTitle')} ratio="video" />
-            </div>
+            {/* Interactive Google Map (office location) */}
+            <OfficeMap
+              embedUrl={OFFICE_MAP_EMBED_URL}
+              query={contact.office}
+              title={t('mapTitle')}
+            />
           </Reveal>
 
           {/* Inquiry form */}

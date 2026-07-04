@@ -1,13 +1,16 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { TrendingUp, GraduationCap, Factory, HeartHandshake } from 'lucide-react';
 import { pageMetadata } from '@/lib/metadata';
-import { getOpenCareers } from '@/lib/data/careers';
 import { PageHeader } from '@/components/shared/page-header';
 import { SectionHeading } from '@/components/shared/section-heading';
 import { Reveal, Stagger, StaggerItem } from '@/components/shared/motion';
 import { Placeholder } from '@/components/shared/placeholder';
-import { CareerOpenings } from '@/components/sections/career-openings';
+import {
+  CareerOpeningsData,
+  CareerOpeningsSkeleton,
+} from '@/components/sections/career-openings-section';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,7 +32,6 @@ export default async function CareerPage({
   setRequestLocale(locale);
   const t = await getTranslations('Career');
   const ph = await getTranslations('Placeholders');
-  const careers = await getOpenCareers();
 
   const reasons = [
     { icon: TrendingUp, title: t('why1Title'), body: t('why1Body') },
@@ -86,7 +88,9 @@ export default async function CareerPage({
         <div className="container">
           <SectionHeading title={t('openingsTitle')} />
           <div className="mt-14">
-            <CareerOpenings careers={careers} />
+            <Suspense fallback={<CareerOpeningsSkeleton />}>
+              <CareerOpeningsData />
+            </Suspense>
           </div>
         </div>
       </section>

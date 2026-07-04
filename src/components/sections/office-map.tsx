@@ -1,20 +1,28 @@
 import { ExternalLink } from 'lucide-react';
 
 /**
- * Interactive Google Map embed — no API key required (uses the `output=embed`
- * endpoint). Pass a `query` (address or "lat,lng"); to pin an exact spot, use
- * coordinates, e.g. query="-6.1075,106.7389".
+ * Interactive Google Map embed — no API key required.
+ *
+ * Two ways to pin the location:
+ *  1. `query` — an address or "lat,lng" (uses the `output=embed` endpoint).
+ *     Simple, but an address may resolve to the general area.
+ *  2. `embedUrl` — the exact `src` from Google Maps → Share → "Embed a map".
+ *     Most precise and reliable; takes priority over `query` when provided.
  */
 export function OfficeMap({
   query,
+  embedUrl,
   title = 'Office location',
   zoom = 15,
 }: {
   query: string;
+  embedUrl?: string;
   title?: string;
   zoom?: number;
 }) {
-  const embedSrc = `https://www.google.com/maps?q=${encodeURIComponent(query)}&z=${zoom}&output=embed`;
+  const embedSrc =
+    embedUrl ??
+    `https://www.google.com/maps?q=${encodeURIComponent(query)}&z=${zoom}&output=embed`;
   const linkSrc = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 
   return (

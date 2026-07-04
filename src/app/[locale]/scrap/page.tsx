@@ -1,23 +1,14 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import {
-  Recycle,
-  Ruler,
-  ShieldAlert,
-  Ban,
-  FileCheck,
-  ArrowRight,
-  CalendarClock,
-} from 'lucide-react';
+import { Ruler, ShieldAlert, Ban, FileCheck, ArrowRight } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { pageMetadata } from '@/lib/metadata';
-import { getCurrentScrapPrices } from '@/lib/data/scrap';
-import { formatCurrency } from '@/lib/utils';
 import { PageHeader } from '@/components/shared/page-header';
 import { SectionHeading } from '@/components/shared/section-heading';
-import { Reveal, Stagger, StaggerItem } from '@/components/shared/motion';
+import { Reveal } from '@/components/shared/motion';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { ScrapPricesGrid, ScrapPricesSkeleton } from '@/components/sections/scrap-prices';
 
 // Prices are read from the database at request time.
 export const dynamic = 'force-dynamic';
@@ -39,13 +30,6 @@ export default async function ScrapPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('Scrap');
-  const prices = await getCurrentScrapPrices();
-
-  const categoryLabel = (category: string) => {
-    const key = `categories.${category}`;
-    const label = t(key);
-    return label === key ? category : label;
-  };
 
   const rejectionRules = [t('reject1'), t('reject2'), t('reject3')];
   const documents = [t('doc1'), t('doc2'), t('doc3'), t('doc4'), t('doc5')];
@@ -54,49 +38,14 @@ export default async function ScrapPage({
     <>
       <PageHeader eyebrow={t('eyebrow')} title={t('title')} description={t('intro')} />
 
-      {/* Current buying prices */}
+      {/* Current buying prices — streamed so the page shell appears instantly
+          while the database (incl. any Neon cold start) loads. */}
       <section className="section pt-4">
         <div className="container">
           <SectionHeading title={t('pricesTitle')} />
-
-          {prices.length === 0 ? (
-            <div className="mt-12 rounded-2xl border bg-card p-16 text-center text-muted-foreground shadow-soft">
-              {t('empty')}
-            </div>
-          ) : (
-            <Stagger className="mx-auto mt-12 grid max-w-4xl gap-6 sm:grid-cols-2">
-              {prices.map((p) => (
-                <StaggerItem key={p.id}>
-                  <div className="flex h-full flex-col rounded-2xl border bg-card p-8 shadow-soft">
-                    <div className="flex items-center gap-3">
-                      <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary">
-                        <Recycle className="h-5 w-5" />
-                      </span>
-                      <h3 className="text-lg font-semibold">{categoryLabel(p.category)}</h3>
-                    </div>
-
-                    <div className="mt-6 flex items-baseline gap-2">
-                      <span className="text-display text-4xl text-primary sm:text-5xl">
-                        {formatCurrency(p.price, p.currency)}
-                      </span>
-                      <span className="text-sm font-medium text-muted-foreground">
-                        {t('priceUnit')}
-                      </span>
-                    </div>
-                    <p className="mt-1 text-sm text-muted-foreground">{t('priceBasis')}</p>
-
-                    <div className="mt-6 flex items-center gap-2 border-t pt-4 text-xs text-muted-foreground">
-                      <CalendarClock className="h-3.5 w-3.5" />
-                      {t('lastUpdated')}: {p.date}
-                    </div>
-                    <Badge variant="accent" className="mt-3 self-start">
-                      {t('validNote')}
-                    </Badge>
-                  </div>
-                </StaggerItem>
-              ))}
-            </Stagger>
-          )}
+          <Suspense fallback={<ScrapPricesSkeleton />}>
+            <ScrapPricesGrid locale={locale} />
+          </Suspense>
         </div>
       </section>
 
