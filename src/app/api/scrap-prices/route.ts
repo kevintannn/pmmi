@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { scrapPriceSchema } from '@/lib/validations';
+import { revalidateScrap } from '@/lib/revalidate';
 
 export async function GET() {
   const prices = await prisma.scrapPrice.findMany({
@@ -32,6 +33,7 @@ export async function POST(request: Request) {
         notes: notes || null,
       },
     });
+    revalidateScrap();
     return NextResponse.json({ ...created, price: Number(created.price) }, { status: 201 });
   } catch {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });

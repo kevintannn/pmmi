@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { scrapPriceSchema } from '@/lib/validations';
+import { revalidateScrap } from '@/lib/revalidate';
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -26,6 +27,7 @@ export async function PUT(request: Request, { params }: Params) {
         notes: notes || null,
       },
     });
+    revalidateScrap();
     return NextResponse.json({ ...updated, price: Number(updated.price) });
   } catch {
     return NextResponse.json({ error: 'Not found or server error' }, { status: 500 });
@@ -36,6 +38,7 @@ export async function DELETE(_request: Request, { params }: Params) {
   try {
     const { id } = await params;
     await prisma.scrapPrice.delete({ where: { id } });
+    revalidateScrap();
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: 'Not found or server error' }, { status: 500 });

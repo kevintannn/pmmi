@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { careerSchema } from '@/lib/validations';
+import { revalidateCareers } from '@/lib/revalidate';
 
 export async function GET() {
   const careers = await prisma.career.findMany({ orderBy: { createdAt: 'desc' } });
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
       );
     }
     const created = await prisma.career.create({ data: parsed.data });
+    revalidateCareers();
     return NextResponse.json(created, { status: 201 });
   } catch {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });

@@ -10,8 +10,10 @@ import { Reveal } from '@/components/shared/motion';
 import { Button } from '@/components/ui/button';
 import { ScrapPricesGrid, ScrapPricesSkeleton } from '@/components/sections/scrap-prices';
 
-// Prices are read from the database at request time.
-export const dynamic = 'force-dynamic';
+// Prerender as a static page (served instantly from the CDN like the rest of
+// the site) and revalidate periodically. Admin edits trigger on-demand
+// revalidation, so price changes appear immediately.
+export const revalidate = 300;
 
 export async function generateMetadata({
   params,

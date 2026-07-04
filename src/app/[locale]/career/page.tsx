@@ -12,7 +12,9 @@ import {
   CareerOpeningsSkeleton,
 } from '@/components/sections/career-openings-section';
 
-export const dynamic = 'force-dynamic';
+// Prerender as a static page (served instantly from the CDN) and revalidate
+// periodically. Admin edits trigger on-demand revalidation for instant updates.
+export const revalidate = 300;
 
 export async function generateMetadata({
   params,
