@@ -96,10 +96,10 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
                     <SpecBlock icon={Boxes} label={t('applications')} value={p.applications} />
 
                     <Button asChild variant="outline">
-                      <a href={p.pdf} download>
-                        <Download />
-                        {tc('download')}
-                      </a>
+                      {/* <a href={p.pdf} download> */}
+                      <Download />
+                      {tc('download')}
+                      {/* </a> */}
                     </Button>
                   </Reveal>
                 </div>
