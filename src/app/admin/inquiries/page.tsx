@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import { prisma } from '@/lib/prisma';
 import { withTimeout } from '@/lib/db';
 import { formatDateISO } from '@/lib/utils';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { AdminTableSkeletonRows } from '@/components/admin/admin-skeletons';
 import {
   Table,
   TableBody,
@@ -20,9 +22,42 @@ async function getInquiries() {
   );
 }
 
-export default async function InquiriesAdminPage() {
+async function InquiryRows() {
   const inquiries = await getInquiries();
 
+  if (inquiries.length === 0) {
+    return (
+      <TableRow>
+        <TableCell colSpan={5} className="py-12 text-center text-muted-foreground">
+          No inquiries yet.
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  return inquiries.map((q) => (
+    <TableRow key={q.id}>
+      <TableCell className="whitespace-nowrap font-medium">
+        {formatDateISO(q.createdAt)}
+      </TableCell>
+      <TableCell>
+        <div>{q.name}</div>
+        <a
+          href={`mailto:${q.email}`}
+          className="text-sm text-primary underline-offset-4 hover:underline"
+        >
+          {q.email}
+        </a>
+        {q.phone && <div className="text-sm text-muted-foreground">{q.phone}</div>}
+      </TableCell>
+      <TableCell className="text-muted-foreground">{q.company ?? '—'}</TableCell>
+      <TableCell className="text-muted-foreground">{q.country ?? '—'}</TableCell>
+      <TableCell className="max-w-md text-muted-foreground">{q.message}</TableCell>
+    </TableRow>
+  ));
+}
+
+export default function InquiriesAdminPage() {
   return (
     <div className="space-y-6">
       <AdminPageHeader
@@ -41,36 +76,9 @@ export default async function InquiriesAdminPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {inquiries.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={5} className="py-12 text-center text-muted-foreground">
-                  No inquiries yet.
-                </TableCell>
-              </TableRow>
-            ) : (
-              inquiries.map((q) => (
-                <TableRow key={q.id}>
-                  <TableCell className="whitespace-nowrap font-medium">
-                    {formatDateISO(q.createdAt)}
-                  </TableCell>
-                  <TableCell>
-                    <div>{q.name}</div>
-                    <a
-                      href={`mailto:${q.email}`}
-                      className="text-sm text-primary underline-offset-4 hover:underline"
-                    >
-                      {q.email}
-                    </a>
-                    {q.phone && (
-                      <div className="text-sm text-muted-foreground">{q.phone}</div>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{q.company ?? '—'}</TableCell>
-                  <TableCell className="text-muted-foreground">{q.country ?? '—'}</TableCell>
-                  <TableCell className="max-w-md text-muted-foreground">{q.message}</TableCell>
-                </TableRow>
-              ))
-            )}
+            <Suspense fallback={<AdminTableSkeletonRows cols={5} />}>
+              <InquiryRows />
+            </Suspense>
           </TableBody>
         </Table>
       </div>

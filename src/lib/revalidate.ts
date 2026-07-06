@@ -1,4 +1,5 @@
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { SITE_CONTENT_TAG } from '@/lib/content';
 
 /**
  * On-demand revalidation for the ISR public pages. Call after an admin mutation
@@ -11,4 +12,12 @@ export function revalidateScrap() {
 
 export function revalidateCareers() {
   revalidatePath('/[locale]/career', 'page');
+}
+
+/**
+ * Editable contact info feeds the footer (on every page) and the contact page.
+ * Invalidating the tag refreshes all of them on their next visit.
+ */
+export function revalidateSiteContent() {
+  revalidateTag(SITE_CONTENT_TAG);
 }

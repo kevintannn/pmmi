@@ -19,16 +19,17 @@ export async function generateMetadata({
   return pageMetadata(locale, 'Products', '/products');
 }
 
-export default async function ProductsPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function ProductsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('Products');
   const tc = await getTranslations('Common');
   const ph = await getTranslations('Placeholders');
+
+  // Serve the language-appropriate specification PDF from /public/specs.
+  // To enable a product's download, add /public/specs/<specBase>.en.pdf and
+  // <specBase>.zh.pdf, then set hasSpec: true.
+  const lang = locale === 'zh' ? 'zh' : 'en';
 
   const products = [
     {
@@ -38,7 +39,8 @@ export default async function ProductsPage({
       dimensions: t('slabDimensions'),
       applications: t('slabApplications'),
       placeholder: 'steelSlab' as const,
-      pdf: '/specs/carbon-steel-slab.pdf',
+      specBase: 'carbon-steel-slab',
+      hasSpec: true,
     },
     {
       id: 'billet',
@@ -47,13 +49,14 @@ export default async function ProductsPage({
       dimensions: t('billetDimensions'),
       applications: t('billetApplications'),
       placeholder: 'steelBillet' as const,
-      pdf: '/specs/carbon-steel-billet.pdf',
+      specBase: 'carbon-steel-billet',
+      hasSpec: false,
     },
   ];
 
   return (
     <>
-      <PageHeader eyebrow={t('title')} title={t('title')} description={t('intro')} />
+      <PageHeader eyebrow={t('eyebrow')} title={t('title')} description={t('intro')} />
 
       <section className="section pt-4">
         <div className="container">
@@ -73,7 +76,11 @@ export default async function ProductsPage({
                 <ProductJsonLd name={p.name} description={p.specs} category="Carbon Steel" />
                 <div className="mt-8 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
                   <Reveal direction="right">
-                    <Placeholder src={`/images/${p.placeholder}.webp`} label={ph(p.placeholder)} ratio="square" />
+                    <Placeholder
+                      src={`/images/${p.placeholder}.webp`}
+                      label={ph(p.placeholder)}
+                      ratio="square"
+                    />
                   </Reveal>
 
                   <Reveal direction="left" className="space-y-8">

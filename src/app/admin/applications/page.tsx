@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import { prisma } from '@/lib/prisma';
 import { withTimeout } from '@/lib/db';
 import { formatDateISO } from '@/lib/utils';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { AdminTableSkeletonRows } from '@/components/admin/admin-skeletons';
 import {
   Table,
   TableBody,
@@ -24,9 +26,51 @@ async function getApplications() {
   );
 }
 
-export default async function ApplicationsAdminPage() {
+async function ApplicationRows() {
   const applications = await getApplications();
 
+  if (applications.length === 0) {
+    return (
+      <TableRow>
+        <TableCell colSpan={5} className="py-12 text-center text-muted-foreground">
+          No applications yet.
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  return applications.map((a) => (
+    <TableRow key={a.id}>
+      <TableCell className="whitespace-nowrap font-medium">
+        {formatDateISO(a.createdAt)}
+      </TableCell>
+      <TableCell>{a.name}</TableCell>
+      <TableCell className="text-muted-foreground">
+        {a.career?.position ?? 'General'}
+      </TableCell>
+      <TableCell className="text-muted-foreground">
+        <div>{a.email}</div>
+        <div>{a.phone}</div>
+      </TableCell>
+      <TableCell>
+        {a.resumeUrl ? (
+          <a
+            href={a.resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline-offset-4 hover:underline"
+          >
+            Download
+          </a>
+        ) : (
+          '—'
+        )}
+      </TableCell>
+    </TableRow>
+  ));
+}
+
+export default function ApplicationsAdminPage() {
   return (
     <div className="space-y-6">
       <AdminPageHeader
@@ -45,43 +89,9 @@ export default async function ApplicationsAdminPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {applications.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={5} className="py-12 text-center text-muted-foreground">
-                  No applications yet.
-                </TableCell>
-              </TableRow>
-            ) : (
-              applications.map((a) => (
-                <TableRow key={a.id}>
-                  <TableCell className="whitespace-nowrap font-medium">
-                    {formatDateISO(a.createdAt)}
-                  </TableCell>
-                  <TableCell>{a.name}</TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {a.career?.position ?? 'General'}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    <div>{a.email}</div>
-                    <div>{a.phone}</div>
-                  </TableCell>
-                  <TableCell>
-                    {a.resumeUrl ? (
-                      <a
-                        href={a.resumeUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary underline-offset-4 hover:underline"
-                      >
-                        Download
-                      </a>
-                    ) : (
-                      '—'
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
+            <Suspense fallback={<AdminTableSkeletonRows cols={5} />}>
+              <ApplicationRows />
+            </Suspense>
           </TableBody>
         </Table>
       </div>

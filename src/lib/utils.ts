@@ -20,3 +20,11 @@ export function formatDateISO(date: Date | string) {
   const d = typeof date === 'string' ? new Date(date) : date;
   return d.toISOString().slice(0, 10);
 }
+
+/**
+ * Build a WhatsApp chat link from a phone number. Strips spaces, dashes and the
+ * leading "+", e.g. "+62 851 2107 4332" → "https://wa.me/6285121074332".
+ */
+export function whatsappUrl(phone: string) {
+  return `https://wa.me/${phone.replace(/\D/g, '')}`;
+}

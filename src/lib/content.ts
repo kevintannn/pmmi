@@ -1,5 +1,9 @@
 import 'server-only';
+import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
+
+/** Cache tag for editable site content; revalidate it after admin edits. */
+export const SITE_CONTENT_TAG = 'site-content';
 
 /** Default values used when a SiteContent row is missing (e.g. before seeding). */
 const DEFAULTS: Record<string, { en: string; zh: string }> = {
@@ -23,13 +27,6 @@ const DEFAULTS: Record<string, { en: string; zh: string }> = {
 // Neon cold start (free-tier databases auto-suspend and take a few seconds to
 // wake) so we don't fall back to defaults while the DB is merely waking up.
 const DB_TIMEOUT_MS = 8000;
-
-// In-memory TTL cache (per server instance) so the footer/contact info isn't
-// re-queried on every navigation. Successful lookups are held longer than
-// failures, so a briefly-down DB recovers quickly.
-const CACHE_TTL_OK_MS = 5 * 60 * 1000;
-const CACHE_TTL_FAIL_MS = 20 * 1000;
-const cache = new Map<string, { at: number; ttl: number; data: Record<string, string> }>();
 
 export type ContactInfo = {
   email: string;
@@ -68,26 +65,22 @@ async function fetchContactMap(locale: string): Promise<Record<string, string>> 
 }
 
 /**
- * Load editable contact info for a locale, falling back to defaults. Results are
- * cached in-memory per locale so the footer/contact info isn't re-queried on
- * every navigation.
+ * Cached per-locale contact map. Tagged with SITE_CONTENT_TAG so an admin edit
+ * (via /admin/content) can invalidate it — and every page that rendered the
+ * footer/contact info — with `revalidateTag`. The `revalidate` acts as a
+ * fallback refresh interval.
  */
+const loadContactMap = unstable_cache(
+  (locale: string) => fetchContactMap(locale),
+  ['contact-info'],
+  // Admin edits invalidate this immediately via the tag; the long revalidate is
+  // just a safety-net refresh so content pages stay highly cacheable.
+  { tags: [SITE_CONTENT_TAG], revalidate: 3600 },
+);
+
+/** Load editable contact info for a locale, falling back to defaults. */
 export async function getContactInfo(locale: string): Promise<ContactInfo> {
-  const cached = cache.get(locale);
-  let data: Record<string, string>;
-
-  if (cached && Date.now() - cached.at < cached.ttl) {
-    data = cached.data;
-  } else {
-    data = await fetchContactMap(locale);
-    const ok = Object.keys(data).length > 0;
-    cache.set(locale, {
-      at: Date.now(),
-      ttl: ok ? CACHE_TTL_OK_MS : CACHE_TTL_FAIL_MS,
-      data,
-    });
-  }
-
+  const data = await loadContactMap(locale);
   const map = new Map(Object.entries(data));
   const get = (key: string) => map.get(key) || fallback(key, locale);
 

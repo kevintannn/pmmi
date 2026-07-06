@@ -24,11 +24,7 @@ export async function generateMetadata({
   return pageMetadata(locale, 'Scrap', '/scrap');
 }
 
-export default async function ScrapPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function ScrapPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('Scrap');
@@ -48,6 +44,9 @@ export default async function ScrapPage({
           <Suspense fallback={<ScrapPricesSkeleton />}>
             <ScrapPricesGrid locale={locale} />
           </Suspense>
+          <p className="mx-auto mt-8 max-w-4xl text-center text-xs text-muted-foreground">
+            {t('priceDisclaimer')}
+          </p>
         </div>
       </section>
 
@@ -133,9 +132,7 @@ export default async function ScrapPage({
           <Reveal>
             <div className="relative overflow-hidden rounded-3xl bg-primary px-8 py-16 text-center text-primary-foreground sm:px-16">
               <h2 className="text-display text-3xl sm:text-4xl">{t('ctaTitle')}</h2>
-              <p className="mx-auto mt-4 max-w-xl text-primary-foreground/80">
-                {t('ctaBody')}
-              </p>
+              <p className="mx-auto mt-4 max-w-xl text-primary-foreground/80">{t('ctaBody')}</p>
               <Button asChild variant="accent" size="lg" className="mt-8">
                 <Link href="/contact">
                   {t('ctaButton')}

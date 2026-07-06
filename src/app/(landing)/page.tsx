@@ -12,13 +12,13 @@ const LOCALES = [
     code: 'zh',
     label: '中文',
     caption: 'Chinese',
-    slogan: '以钢铁铸就印尼的未来',
+    slogan: '以钢铁铸就未来',
   },
   {
     code: 'en',
     label: 'English',
     caption: '英文',
-    slogan: "Building Indonesia's Future Through Steel",
+    slogan: 'Forging the Future Through Steel',
   },
 ] as const;
 
@@ -65,9 +65,9 @@ export default function LanguageSelector() {
         </p>
 
         <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-muted-foreground">
-          以钢铁铸就印尼的未来
+          以钢铁铸就未来
           <span className="mx-2 text-border">·</span>
-          Building Indonesia&apos;s Future Through Steel
+          Forging the Future Through Steel
         </p>
 
         <p className="mt-12 text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">

@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Mail, Phone, Clock, Building2, MapPin } from 'lucide-react';
 import { pageMetadata } from '@/lib/metadata';
 import { getContactInfo } from '@/lib/content';
+import { whatsappUrl } from '@/lib/utils';
 import { OFFICE_MAP_EMBED_URL } from '@/lib/constants';
 import { PageHeader } from '@/components/shared/page-header';
 import { Reveal } from '@/components/shared/motion';
@@ -29,11 +30,23 @@ export default async function ContactPage({
   const t = await getTranslations('Contact');
   const contact = await getContactInfo(locale);
 
-  const details = [
+  const details: Array<{
+    icon: typeof Building2;
+    label: string;
+    value: string;
+    href?: string;
+    external?: boolean;
+  }> = [
     { icon: Building2, label: t('office'), value: contact.office },
     { icon: MapPin, label: t('factory'), value: contact.factory },
     { icon: Mail, label: t('email'), value: contact.email, href: `mailto:${contact.email}` },
-    { icon: Phone, label: t('phone'), value: contact.phone, href: `tel:${contact.phone}` },
+    {
+      icon: Phone,
+      label: t('phone'),
+      value: contact.phone,
+      href: whatsappUrl(contact.phone),
+      external: true,
+    },
     { icon: Clock, label: t('hours'), value: contact.hours },
   ];
 
@@ -45,7 +58,7 @@ export default async function ContactPage({
         phone={contact.phone}
         factory={contact.factory}
       />
-      <PageHeader eyebrow={t('title')} title={t('title')} description={t('intro')} />
+      <PageHeader eyebrow={t('eyebrow')} title={t('title')} description={t('intro')} />
 
       <section className="section pt-4">
         <div className="container grid gap-12 lg:grid-cols-2 lg:gap-16">
@@ -62,7 +75,12 @@ export default async function ContactPage({
                       {d.label}
                     </p>
                     {d.href ? (
-                      <a href={d.href} className="mt-0.5 block hover:text-primary">
+                      <a
+                        href={d.href}
+                        target={d.external ? '_blank' : undefined}
+                        rel={d.external ? 'noopener noreferrer' : undefined}
+                        className="mt-0.5 block hover:text-primary"
+                      >
                         {d.value}
                       </a>
                     ) : (

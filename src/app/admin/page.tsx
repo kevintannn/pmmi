@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { LineChart, Briefcase, Inbox, Mail } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 import { withTimeout } from '@/lib/db';
+import { DashboardStatsSkeleton } from '@/components/admin/admin-skeletons';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,7 +24,7 @@ async function getCounts() {
   return { scrap, careers, applications, inquiries, ok: true as const };
 }
 
-export default async function AdminDashboard() {
+async function DashboardStats() {
   const counts = await getCounts();
 
   const cards = [
@@ -38,16 +40,9 @@ export default async function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Manage scrap prices, careers and messages. No authentication is configured yet.
-        </p>
-      </div>
-
+    <>
       {!counts.ok && (
-        <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800">
+        <div className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800">
           Could not reach the database. Check <code>DATABASE_URL</code> and run
           migrations/seed.
         </div>
@@ -68,6 +63,23 @@ export default async function AdminDashboard() {
           </Link>
         ))}
       </div>
+    </>
+  );
+}
+
+export default function AdminDashboard() {
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Manage scrap prices, careers and messages. No authentication is configured yet.
+        </p>
+      </div>
+
+      <Suspense fallback={<DashboardStatsSkeleton />}>
+        <DashboardStats />
+      </Suspense>
     </div>
   );
 }

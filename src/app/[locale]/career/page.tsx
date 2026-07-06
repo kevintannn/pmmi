@@ -44,7 +44,7 @@ export default async function CareerPage({
 
   return (
     <>
-      <PageHeader eyebrow={t('title')} title={t('title')} description={t('bannerBody')} />
+      <PageHeader eyebrow={t('eyebrow')} title={t('title')} description={t('bannerBody')} />
 
       {/* Banner */}
       <section className="section pt-4">

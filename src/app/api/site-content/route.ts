@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
+import { revalidateSiteContent } from '@/lib/revalidate';
 
 export async function GET(request: Request) {
   const locale = new URL(request.url).searchParams.get('locale') ?? undefined;
@@ -33,6 +34,7 @@ export async function PUT(request: Request) {
       update: { value },
       create: { key, locale, value },
     });
+    revalidateSiteContent();
     return NextResponse.json(row);
   } catch {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });

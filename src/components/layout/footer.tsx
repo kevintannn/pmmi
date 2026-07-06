@@ -1,16 +1,11 @@
 import { useTranslations } from 'next-intl';
-import { Linkedin, Mail } from 'lucide-react';
+import { Linkedin, Mail, MessageCircle } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { NAV_ITEMS, SOCIAL, COMPANY } from '@/lib/constants';
+import { whatsappUrl } from '@/lib/utils';
 import { Logo } from '@/components/shared/logo';
 
-export function Footer({
-  email,
-  phone,
-}: {
-  email: string;
-  phone: string;
-}) {
+export function Footer({ email, phone }: { email: string; phone: string }) {
   const t = useTranslations('Footer');
   const nav = useTranslations('Nav');
   const year = new Date().getFullYear();
@@ -53,8 +48,17 @@ export function Footer({
                   <Mail className="h-4 w-4" /> {email}
                 </a>
               </li>
-              <li>{phone}</li>
-              <li className="pt-2">
+              <li>
+                <a
+                  href={whatsappUrl(phone)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 transition-colors hover:text-foreground"
+                >
+                  <MessageCircle className="h-4 w-4" /> {phone}
+                </a>
+              </li>
+              {/* <li className="pt-2">
                 <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-foreground/70">
                   {t('follow')}
                 </span>
@@ -67,7 +71,7 @@ export function Footer({
                 >
                   <Linkedin className="h-4 w-4" />
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
