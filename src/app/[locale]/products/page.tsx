@@ -29,7 +29,7 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
   // Serve the language-appropriate specification PDF from /public/specs.
   // To enable a product's download, add /public/specs/<specBase>.en.pdf and
   // <specBase>.zh.pdf, then set hasSpec: true.
-  // const lang = locale === 'zh' ? 'zh' : 'en';
+  const lang = locale === 'zh' ? 'zh' : 'en';
 
   const products = [
     {
@@ -95,12 +95,12 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
                     <SpecBlock icon={Ruler} label={t('dimensions')} value={p.dimensions} />
                     <SpecBlock icon={Boxes} label={t('applications')} value={p.applications} />
 
-                    <Button asChild variant="outline">
-                      {/* <a href={p.pdf} download> */}
+                    {/* <Button asChild variant="outline">
+                      <a href={p.pdf} download>
                       <Download />
                       {tc('download')}
-                      {/* </a> */}
-                    </Button>
+                      </a>
+                    </Button> */}
                   </Reveal>
                 </div>
               </TabsContent>
