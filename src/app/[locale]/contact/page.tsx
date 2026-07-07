@@ -57,6 +57,7 @@ export default async function ContactPage({
         email={contact.email}
         phone={contact.phone}
         factory={contact.factory}
+        office={contact.office}
       />
       <PageHeader eyebrow={t('eyebrow')} title={t('title')} description={t('intro')} />
 
