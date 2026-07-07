@@ -95,12 +95,17 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
                     <SpecBlock icon={Ruler} label={t('dimensions')} value={p.dimensions} />
                     <SpecBlock icon={Boxes} label={t('applications')} value={p.applications} />
 
-                    {/* <Button asChild variant="outline">
-                      <a href={p.pdf} download>
-                      <Download />
-                      {tc('download')}
-                      </a>
-                    </Button> */}
+                    {p.hasSpec && (
+                      <Button asChild variant="outline">
+                        <a
+                          href={`/specs/${p.specBase}.${lang}.pdf`}
+                          download={`PMMI ${p.name}.pdf`}
+                        >
+                          <Download />
+                          {tc('download')}
+                        </a>
+                      </Button>
+                    )}
                   </Reveal>
                 </div>
               </TabsContent>
