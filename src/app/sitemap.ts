@@ -18,9 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       return {
         url: `${SITE_URL}${path}`,
         lastModified: now,
-        changeFrequency: (item.key === 'scrap' ? 'daily' : 'monthly') as
-          | 'daily'
-          | 'monthly',
+        changeFrequency: (item.key === 'scrap' ? 'daily' : 'monthly') as 'daily' | 'monthly',
         priority: item.key === 'home' ? 1 : 0.7,
         alternates: { languages },
       };

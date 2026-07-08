@@ -192,20 +192,36 @@ writeFileSync(path.join(iconsDir, 'icon-512.png'), icon(512));
 writeFileSync(path.join(iconsDir, 'maskable-512.png'), icon(512, { maskable: true }));
 writeFileSync(path.join(iconsDir, 'apple-touch-icon.png'), icon(180));
 
-// favicon.ico wrapping a 32×32 PNG
-const faviconPng = icon(32);
-const dir = Buffer.alloc(6);
-dir.writeUInt16LE(0, 0);
-dir.writeUInt16LE(1, 2);
-dir.writeUInt16LE(1, 4);
-const entry = Buffer.alloc(16);
-entry[0] = 32;
-entry[1] = 32;
-entry.writeUInt16LE(1, 4);
-entry.writeUInt16LE(32, 6);
-entry.writeUInt32LE(faviconPng.length, 8);
-entry.writeUInt32LE(22, 12);
-writeFileSync(path.join(outDir, 'favicon.ico'), Buffer.concat([dir, entry, faviconPng]));
+// favicon.ico with multiple sizes: 32×32 (browser tabs) and 48×48 (Google
+// Search requires the favicon to be a multiple of 48px to show in results).
+{
+  const sizes = [32, 48];
+  const pngs = sizes.map((s) => icon(s));
+  const header = Buffer.alloc(6);
+  header.writeUInt16LE(0, 0); // reserved
+  header.writeUInt16LE(1, 2); // type: icon
+  header.writeUInt16LE(sizes.length, 4);
+
+  const entries = [];
+  let offset = 6 + 16 * sizes.length;
+  for (let i = 0; i < sizes.length; i++) {
+    const e = Buffer.alloc(16);
+    e[0] = sizes[i] === 256 ? 0 : sizes[i]; // width
+    e[1] = sizes[i] === 256 ? 0 : sizes[i]; // height
+    e.writeUInt16LE(1, 4); // color planes
+    e.writeUInt16LE(32, 6); // bits per pixel
+    e.writeUInt32LE(pngs[i].length, 8); // data size
+    e.writeUInt32LE(offset, 12); // data offset
+    entries.push(e);
+    offset += pngs[i].length;
+  }
+  writeFileSync(
+    path.join(outDir, 'favicon.ico'),
+    Buffer.concat([header, ...entries, ...pngs]),
+  );
+  // Standalone 48×48 PNG favicon, referenced from metadata for Google.
+  writeFileSync(path.join(iconsDir, 'favicon-48.png'), icon(48));
+}
 
 // Open Graph image 1200×630
 {
