@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { careerSchema } from '@/lib/validations';
 import { revalidateCareers } from '@/lib/revalidate';
+import { isAdminAuthed, unauthorized } from '@/lib/admin-auth';
 
 type Params = { params: Promise<{ id: string }> };
 
 export async function PUT(request: Request, { params }: Params) {
+  if (!(await isAdminAuthed())) return unauthorized();
   try {
     const { id } = await params;
     const body = await request.json();
@@ -25,6 +27,7 @@ export async function PUT(request: Request, { params }: Params) {
 }
 
 export async function DELETE(_request: Request, { params }: Params) {
+  if (!(await isAdminAuthed())) return unauthorized();
   try {
     const { id } = await params;
     await prisma.career.delete({ where: { id } });

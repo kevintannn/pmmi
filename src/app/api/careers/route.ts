@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { careerSchema } from '@/lib/validations';
 import { revalidateCareers } from '@/lib/revalidate';
+import { isAdminAuthed, unauthorized } from '@/lib/admin-auth';
 
 export async function GET() {
   const careers = await prisma.career.findMany({ orderBy: { createdAt: 'desc' } });
@@ -9,6 +10,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!(await isAdminAuthed())) return unauthorized();
   try {
     const body = await request.json();
     const parsed = careerSchema.safeParse(body);

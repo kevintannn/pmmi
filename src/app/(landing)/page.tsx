@@ -57,9 +57,7 @@ export default function LanguageSelector() {
           <Logo className="scale-125" />
         </div>
 
-        <h1 className="mt-10 text-display text-3xl sm:text-4xl">
-          PT Permai Metal Indonesia
-        </h1>
+        <h1 className="text-display mt-10 text-3xl sm:text-4xl">PT Permai Metal Indonesia</h1>
         <p className="mt-2 text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
           佩尔迈金属（印尼）有限公司
         </p>

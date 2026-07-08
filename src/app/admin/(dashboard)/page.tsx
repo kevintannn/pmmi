@@ -73,7 +73,7 @@ export default function AdminDashboard() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Manage scrap prices, careers and messages. No authentication is configured yet.
+          Manage scrap prices, careers, applications and inquiries.
         </p>
       </div>
 

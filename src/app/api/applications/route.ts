@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { applicationSchema } from '@/lib/validations';
+import { isAdminAuthed, unauthorized } from '@/lib/admin-auth';
 
 export async function GET() {
-  // Admin listing (newest first). Add auth before exposing publicly.
+  if (!(await isAdminAuthed())) return unauthorized();
   const applications = await prisma.application.findMany({
     orderBy: { createdAt: 'desc' },
     include: { career: { select: { position: true } } },

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { scrapPriceSchema } from '@/lib/validations';
 import { revalidateScrap } from '@/lib/revalidate';
+import { isAdminAuthed, unauthorized } from '@/lib/admin-auth';
 
 export async function GET() {
   const prices = await prisma.scrapPrice.findMany({
@@ -14,6 +15,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!(await isAdminAuthed())) return unauthorized();
   try {
     const body = await request.json();
     const parsed = scrapPriceSchema.safeParse(body);

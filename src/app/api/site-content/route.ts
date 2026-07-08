@@ -2,8 +2,10 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { revalidateSiteContent } from '@/lib/revalidate';
+import { isAdminAuthed, unauthorized } from '@/lib/admin-auth';
 
 export async function GET(request: Request) {
+  if (!(await isAdminAuthed())) return unauthorized();
   const locale = new URL(request.url).searchParams.get('locale') ?? undefined;
   const rows = await prisma.siteContent.findMany({
     where: locale ? { locale } : undefined,
@@ -19,6 +21,7 @@ const upsertSchema = z.object({
 });
 
 export async function PUT(request: Request) {
+  if (!(await isAdminAuthed())) return unauthorized();
   try {
     const body = await request.json();
     const parsed = upsertSchema.safeParse(body);
