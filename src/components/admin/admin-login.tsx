@@ -97,6 +97,7 @@ export function AdminLogin() {
                 onChange={(e) => onChange(i, e.target.value)}
                 onKeyDown={(e) => onKeyDown(i, e)}
                 inputMode="numeric"
+                type="password"
                 autoComplete={i === 0 ? 'one-time-code' : 'off'}
                 maxLength={1}
                 disabled={loading}
