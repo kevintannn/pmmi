@@ -4,6 +4,7 @@ import { LineChart, Briefcase, Inbox, Mail } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 import { withTimeout } from '@/lib/db';
 import { DashboardStatsSkeleton } from '@/components/admin/admin-skeletons';
+import { MaintenanceToggle } from '@/components/admin/maintenance-toggle';
 
 export const dynamic = 'force-dynamic';
 
@@ -80,6 +81,8 @@ export default function AdminDashboard() {
       <Suspense fallback={<DashboardStatsSkeleton />}>
         <DashboardStats />
       </Suspense>
+
+      <MaintenanceToggle />
     </div>
   );
 }
