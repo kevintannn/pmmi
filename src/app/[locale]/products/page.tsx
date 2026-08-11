@@ -40,7 +40,7 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
       applications: t('slabApplications'),
       placeholder: 'steelSlab' as const,
       specBase: 'carbon-steel-slab',
-      hasSpec: true,
+      hasSpec: false,
     },
     {
       id: 'billet',
