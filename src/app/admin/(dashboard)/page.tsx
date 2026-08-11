@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { withTimeout } from '@/lib/db';
 import { DashboardStatsSkeleton } from '@/components/admin/admin-skeletons';
 import { MaintenanceToggle } from '@/components/admin/maintenance-toggle';
+import { VisitorStats, VisitorStatsSkeleton } from '@/components/admin/visitor-stats';
 
 export const dynamic = 'force-dynamic';
 
@@ -80,6 +81,10 @@ export default function AdminDashboard() {
 
       <Suspense fallback={<DashboardStatsSkeleton />}>
         <DashboardStats />
+      </Suspense>
+
+      <Suspense fallback={<VisitorStatsSkeleton />}>
+        <VisitorStats />
       </Suspense>
 
       <MaintenanceToggle />

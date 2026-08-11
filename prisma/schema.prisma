@@ -114,3 +114,17 @@ model SiteContent {
   @@index([locale])
   @@map("site_content")
 }
+
+// -----------------------------------------------------------------------------
+// Visitor analytics — one row per unique session (see /api/track).
+// -----------------------------------------------------------------------------
+model Visit {
+  id        String   @id @default(cuid())
+  date      DateTime @db.Date // day bucket, for fast grouping
+  path      String? // first page of the session
+  locale    String?
+  createdAt DateTime @default(now())
+
+  @@index([date])
+  @@map("visits")
+}

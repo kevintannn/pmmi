@@ -8,6 +8,7 @@ import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { VisitTracker } from '@/components/shared/visit-tracker';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -54,6 +55,7 @@ export default async function LocaleLayout({
             <main id="main">{children}</main>
             <Footer email={contact.email} phone={contact.phone} />
             <Toaster />
+            <VisitTracker locale={locale} />
           </TooltipProvider>
         </NextIntlClientProvider>
       </body>
